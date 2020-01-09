@@ -9,6 +9,7 @@ const logger = require("./middleware/logger");
 const authenticate = require("./middleware/authenticate");
 
 app.set("view engine", "pug");
+app.set("views", "./views");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -19,7 +20,7 @@ app.use(morgan("tiny"));
 // Configuration
 console.log("Application Name: " + config.get("name"));
 console.log("Mail Server: " + config.get("mail.host"));
-console.log("Mail Password: " + config.get("mail.password"));
+// console.log("Mail Password: " + config.get("mail.password"));
 
 if (app.get("env") === "development") {
   app.use(morgan("tiny"));
@@ -36,7 +37,7 @@ const courses = [
 ];
 
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  res.render("index", { title: "My Express App", message: "Hello" });
 });
 
 app.get("/api/courses", (req, res) => {
