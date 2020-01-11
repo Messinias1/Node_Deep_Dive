@@ -9,16 +9,6 @@ app.use(express.json());
 app.use(logger);
 app.use(authenticator);
 
-const genres = [
-  { id: 1, name: "Action" },
-  { id: 2, name: "Horror" },
-  { id: 3, name: "Romance" }
-];
-
-app.get("/", (req, res) => {
-  res.send(genres);
-});
-
 function validateGenre(genre) {
   const schema = {
     name: Joi.string()
