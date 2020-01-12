@@ -9,11 +9,24 @@ mongoose
   .catch(err => console.error("could not connect to mongoDB...", err));
 
 const courseSchema = new mongoose.Schema({
-  name: String,
+  name: { type: String, required: true, minlength: 5, maxLength: 255 },
+  category: {
+    type: String,
+    required: true,
+    enum: ["web", "mobile", "network"]
+  },
   author: String,
   tags: [String],
   date: { type: Date, default: Date.now },
-  isPublished: Boolean
+  isPublished: Boolean,
+  price: {
+    type: Number,
+    required: function() {
+      return this.isPublished;
+    },
+    min: 10,
+    max: 200
+  }
 });
 
 const Course = mongoose.model("Course", courseSchema);
@@ -21,14 +34,22 @@ const Course = mongoose.model("Course", courseSchema);
 async function createCourse() {
   const course = new Course({
     name: "Angular.js Course",
+    category: "-",
     author: "Mosh",
     tags: ["angular", "frontend"],
-    isPublished: true
+    isPublished: true,
+    price: 15
   });
 
-  const result = await course.save();
-  console.log(result);
+  try {
+    // await course.validate();
+    const result = await course.save();
+    console.log(result);
+  } catch (err) {
+    console.log(err.message);
+  }
 }
+createCourse();
 
 async function getCourses() {
   // Comparison Query Operators
@@ -90,4 +111,11 @@ async function updateCourse(id) {
   );
   console.log(course);
 }
-updateCourse("5e1a28938abb6fb3705e09e4");
+// updateCourse("5e1a28938abb6fb3705e09e4");
+
+async function removeCourse(id) {
+  // const result = await Course.deleteMany({ _id: id });
+  const course = await Course.findByIdAndRemove(id);
+  console.log(course);
+}
+// removeCourse("5e1a28938abb6fb3705e09e4");
