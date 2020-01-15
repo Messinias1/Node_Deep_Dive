@@ -91,7 +91,7 @@ async function getCourses() {
   const pageSize = 10;
 
   const courses = await Course.find({ author: "Mosh", isPublished: true })
-    .find({ _id: "5e1c9e0c47519adcd4dc4eed" })
+    .find({ _id: "5e1dfb6999b7bbee50d48842" })
     // .skip((pageNumber - 1) * pageSize)
     //   .limit(pageSize)
     .sort({ name: 1 })
